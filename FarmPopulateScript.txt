@@ -1,0 +1,97 @@
+Insert into Owner 
+(CVR,Email)
+values
+(12121212,'email@email.com'),
+(12345678,'shadymail@mail.dk');
+
+Insert into Phone 
+(PhoneNumber,OwnerCVRFK)
+values
+(89219401,12121212),
+(34957341,12345678);
+
+Insert into AddressOwner 
+(No,Streetname,Postcode,City,OwnerCVRFK)
+values
+(1,'hejvej',4000,'Roskilde',12121212),
+(2,'nejvej2', 4200, 'Ringsted',12345678);
+
+Insert into Name 
+(First,Last,OwnerCVRFK)
+values
+('Anders','Andersen',12121212),
+('Ole','Hansen',12345678);
+
+
+Insert into Farm 
+(PNumber,Name,OwnerCVRFK)
+values
+(128939123,'Farmville',12121212),
+(389457934,'gaarden',12345678);
+
+Insert into ChrNo 
+(ChrNumber,FarmFK)
+values
+('Farmville',128939123),
+('gaarden',389457934);
+
+
+Insert into AddressFarm
+(No,Streetname,Postcode,City,FarmFK)
+values
+(1,'hejvej2',4000,'Roskilde',12121212),
+(2,'nejvej2', 4200, 'Ringsted',12345678);
+
+Insert into Stall
+(No,FarmFK)
+values
+(1,128939123),
+(2,389457934);
+
+Insert into StallMonitor
+(FarmFK)
+values
+(128939123),
+(389457934);
+
+Insert into State
+(Severity)
+values
+('ja'),
+('nej');
+
+Insert into Earmark
+(Color,ChrNo)
+values
+('red', 2),
+('green', 1);
+
+Insert into Animal
+(Birth,Death,Age,Sex,Produce,Earmark)
+values
+(	2008-11-11,2008-11-12, 2008-11-11,'male','hejvej2',2);
+
+Insert into Box
+(Type,Outdoor,StallFK)
+values
+('type1','true' 2);
+
+Insert into AnimalBoxBT
+(MoveInTime,MoveOutTime,AnimalFK,BoxFK)
+values
+(2008-11-11,2008-11-12,2008-11-11,2008-11-13, 2);
+
+Insert into BoxMonitor
+(Value,Time,BoxFK)
+values
+('hej',2008-11-11, 2);
+
+Insert into SmartUnit
+(SerialNumber,IpAddress,MacAddress, Type,BoxMonitorFK)
+values
+(372482364,'172.16.2.30','00:0a:95:9d:68:16', 'Type2', 1);
+
+Insert into Changes
+(Time,SmartUnitFK,StateFK)
+values
+(2008-11-11, 1, 2);

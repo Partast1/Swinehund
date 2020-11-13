@@ -1,0 +1,120 @@
+--Create DATABASE SwineDB;
+USE SwineDB;
+
+--drop DATABASE SwineDB;
+
+CREATE TABLE Owner
+(
+  CVR int NOT NULL PRIMARY KEY, 
+  Email nvarchar(250) NOT NULL  
+)
+CREATE TABLE Phone
+(
+  PhoneNumber int NOT NULL PRIMARY KEY, 
+  OwnerCVRFK int NOT NULL REFERENCES Owner(CVR) ON DELETE CASCADE
+)
+CREATE TABLE AddressOwner
+(
+  Id int IDENTITY(1,1) PRIMARY KEY, 
+  No int NOT NULL,
+  Streetname nvarchar(200) NOT NULL,
+  Postcode int NOT NULL,
+  City nvarchar(200) NOT NULL,
+  OwnerCVRFK int NOT NULL REFERENCES Owner(CVR) ON DELETE CASCADE
+)
+CREATE TABLE Name
+(
+  Id int IDENTITY(1,1) PRIMARY KEY, 
+  First nvarchar(100) NOT NULL,
+  Last nvarchar(200) NOT NULL,  
+  OwnerCVRFK int NOT NULL REFERENCES Owner(CVR) ON DELETE CASCADE
+)
+CREATE TABLE Farm
+(
+  PNumber int NOT NULL PRIMARY KEY, 
+  Name nvarchar(150) NOT NULL,
+  OwnerCVRFK int NOT NULL REFERENCES Owner(CVR) ON DELETE CASCADE
+)
+CREATE TABLE ChrNo
+(
+  ChrNumber int NOT NULL PRIMARY KEY, 
+  FarmFK int NOT NULL REFERENCES Owner(CVR) ON DELETE CASCADE
+)
+CREATE TABLE AddressFarm
+(
+  Id int IDENTITY(1,1) PRIMARY KEY, 
+  No int NOT NULL,
+  Streetname nvarchar(200) NOT NULL,
+  Postcode int NOT NULL,
+  City nvarchar(200) NOT NULL,
+  FarmFK int NOT NULL REFERENCES Farm(PNumber) ON DELETE CASCADE
+)
+CREATE TABLE Stall
+(
+  No int NOT NULL PRIMARY KEY,
+  FarmFK int NOT NULL REFERENCES Farm(PNumber) ON DELETE CASCADE
+)
+CREATE TABLE StallMonitor
+(
+  No int NOT NULL PRIMARY KEY,
+  FarmFK int NOT NULL REFERENCES Farm(PNumber) ON DELETE CASCADE
+)
+CREATE TABLE State
+(
+  Id int IDENTITY(1,1) PRIMARY KEY,
+  Severity nvarchar(200) NOT NULL 
+)
+
+CREATE TABLE Earmark
+(
+  Id int IDENTITY(1,1) PRIMARY KEY,
+  Color nvarchar(80) NOT NULL,
+  ChrNo int NOT NULL
+)
+CREATE TABLE Animal
+(
+  Birth DATETIME NOT NULL,
+  Death DATETIME NOT NULL,
+  Age DATETIME NOT NULL,
+  Sex varchar(6),
+  Produce varchar(100),
+  Earmark int NOT NULL PRIMARY KEY REFERENCES Earmark(Id) ON DELETE CASCADE
+)
+CREATE TABLE AnimalBoxBT
+(
+Id int IDENTITY(1,1) PRIMARY KEY,
+  MoveInTime DATETIME NOT NULL,
+  MoveOutTime DATETIME NOT NULL
+)
+CREATE TABLE Box
+(
+  No int NOT NULL PRIMARY KEY,
+  Type nvarchar(200) NOT NULL,
+  Outdoor nvarchar(200) NOT NULL,
+  StallFK int NOT NULL REFERENCES Stall(No) ON DELETE CASCADE,
+  AnimalBoxBTFK int NOT NULL REFERENCES AnimalBoxBT(Id) ON DELETE CASCADE
+)
+CREATE TABLE BoxMonitor
+(
+  Id int IDENTITY(1,1) PRIMARY KEY,
+  Value nvarchar(200) NOT NULL,
+  Time DATETIME NOT NULL,
+  BoxFK int NOT NULL REFERENCES Box(No) ON DELETE CASCADE
+)
+CREATE TABLE SmartUnit
+(
+  SerialNumber int PRIMARY KEY,
+  IpAddress nvarchar(100) NOT NULL,
+  MacAddress nvarchar(150) NOT NULL,
+  Type nvarchar(200) NOT NULL,
+  BoxMonitorFK int NOT NULL REFERENCES BoxMonitor(Id) ON DELETE CASCADE
+)
+
+CREATE TABLE Changes
+(
+  Id int IDENTITY(1,1) PRIMARY KEY,
+  Time DATETIME NOT NULL,
+  SmartUnitFK int NOT NULL REFERENCES SmartUnit(SerialNumber) ON DELETE CASCADE,
+  StateFK int NOT NULL REFERENCES State(Id) ON DELETE CASCADE
+)
+
